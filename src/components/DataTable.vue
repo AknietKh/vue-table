@@ -9,6 +9,8 @@
       class="data-table__table"
       :rows="rows"
       :columns="columns"
+      :perPage="pageSize"
+      :current-page="page"
     >
       <template #money="data">
         <p>{{ $options.localizeNumber(data.cell) }}</p>

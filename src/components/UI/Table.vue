@@ -18,7 +18,7 @@
     </div>
     <div class="ui-table__body">
       <div
-        v-for="row in rows"
+        v-for="row in localRows"
         :key="row.id"
         class="ui-table__rows"
       >
@@ -50,14 +50,35 @@ export default {
       type: Array,
       required: true,
     },
+    perPage: {
+      type: Number,
+      default: 10,
+    },
+    currentPage: {
+      type: Number,
+      default: 1,
+    },
   },
 
   data: () => ({
+    localRows: [],
   }),
 
   computed: {
     columnDistribution() {
       return this.columns.map((item) => item.width).join(' ');
+    },
+  },
+
+  watch: {
+    currentPage: {
+      immediate: true,
+      handler(currentPage) {
+        if (currentPage) {
+          const offset = (currentPage - 1) * this.perPage;
+          this.localRows = this.rows.slice(offset, this.perPage * currentPage);
+        }
+      },
     },
   },
 

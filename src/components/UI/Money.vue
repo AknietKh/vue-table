@@ -61,7 +61,6 @@ export default {
 
       if (inputNumber !== '') {
         this.$emit('input', +inputNumber);
-        // this.$emit('input', inputNumber !== '' ? +inputNumber : undefined);
       }
     },
     updateValueInput(value) {
