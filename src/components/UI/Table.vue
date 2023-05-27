@@ -27,8 +27,11 @@
           :key="`${column.prop}_${row[column.prop]}`"
           class="ui-table__cell"
         >
+          <p class="ui-table__mobile-label">
+              {{ column.label }}
+            </p>
           <slot :name="column.prop" :cell="row[column.prop]">
-            {{ row[column.prop] }}
+            <p>{{ row[column.prop] }}</p>
           </slot>
         </div>
       </div>
