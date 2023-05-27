@@ -25,6 +25,12 @@ describe('Money component', () => {
     await wrapper.vm.$nextTick();
 
     expect(control.element.value).toBe(value);
-    expect(wrapper.emitted('input')[1]).toEqual(emitted === undefined ? undefined : [emitted]);
+
+    // Не особо понял почему тут брался второй по счету emit, когда ожидаем только один emit
+    if (emitted !== undefined) {
+      expect(wrapper.emitted('input')[0]).toEqual([emitted]);
+    } else {
+      expect(wrapper.emitted('input')).toEqual(undefined);
+    }
   });
 });
