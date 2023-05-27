@@ -59,9 +59,8 @@ export default {
       this.updateValueInput(value);
       const inputNumber = unlocalizeNumber(this.valueInput);
 
-      if (inputNumber !== '') {
-        this.$emit('input', +inputNumber);
-      }
+      // эмитим undefined, что бы очищать поле в родителе
+      this.$emit('input', inputNumber !== '' ? +inputNumber : undefined);
     },
     updateValueInput(value) {
       const amount = this.formatValueToNumber(value);

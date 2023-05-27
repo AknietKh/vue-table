@@ -7,7 +7,7 @@
     <!-- Your component code here -->
     <ui-table
       class="data-table__table"
-      :rows="rows"
+      :rows="localRows"
       :columns="columns"
       :perPage="pageSize"
       :current-page="page"
@@ -32,6 +32,7 @@
 <script>
 import { localizeNumber } from '@/utils/helpers';
 import { DateTime } from 'luxon';
+import debounce from 'lodash/debounce';
 
 export default {
 
@@ -55,11 +56,36 @@ export default {
     page: 1,
     pageSize: 4,
     moneyFilter: undefined,
+    localRows: [],
+    debouncedFilter: null,
   }),
 
   computed: {
     pageCount() {
-      return Math.ceil(this.rows.length / this.pageSize);
+      return Math.ceil(this.localRows.length / this.pageSize);
+    },
+  },
+
+  watch: {
+    moneyFilter: {
+      handler(moneyFilter) {
+        this.debouncedFilter(moneyFilter);
+      },
+    },
+  },
+
+  created() {
+    this.localRows = this.rows.slice();
+    this.debouncedFilter = debounce(this.handleFilter, 300);
+  },
+
+  methods: {
+    handleFilter(moneyFilter) {
+      if (moneyFilter) {
+        this.localRows = this.rows.filter((row) => row.money <= moneyFilter);
+      } else {
+        this.localRows = this.rows.slice();
+      }
     },
   },
 };

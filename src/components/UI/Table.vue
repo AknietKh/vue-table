@@ -75,16 +75,22 @@ export default {
       immediate: true,
       handler(currentPage) {
         if (currentPage) {
-          const offset = (currentPage - 1) * this.perPage;
-          this.localRows = this.rows.slice(offset, this.perPage * currentPage);
+          this.updateRows();
         }
+      },
+    },
+    rows: {
+      handler() {
+        this.updateRows();
       },
     },
   },
 
-  mounted() {
-    console.log('rows', JSON.parse(JSON.stringify(this.rows)));
-    console.log('columns', JSON.parse(JSON.stringify(this.columns)));
+  methods: {
+    updateRows() {
+      const offset = (this.currentPage - 1) * this.perPage;
+      this.localRows = this.rows.slice(offset, this.perPage * this.currentPage);
+    },
   },
 };
 </script>
