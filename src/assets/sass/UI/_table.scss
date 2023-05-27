@@ -1,0 +1,20 @@
+.ui-table {
+  &__header {
+    display: grid;
+    grid-template-columns: var(--ui-table-columns);
+  }
+  &__rows {
+    display: grid;
+    grid-template-columns: var(--ui-table-columns);
+  }
+  &__cell, &__cell-head {
+    border: 1px solid black;
+    text-align: center;
+  }
+  &__cell-head {
+    padding: 8px;
+  }
+  &__cell {
+    padding: 16px 8px
+  }
+}
