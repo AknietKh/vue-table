@@ -1,4 +1,6 @@
 import axios from 'axios';
+import mockRequsts from './mocks/mockRequsts';
+import { API_ROUTES, isMock } from './configs/api';
 
 /**
  * @var {Axios}
@@ -6,6 +8,11 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 });
+
+if (isMock) {
+  // мокаем запросы для routes
+  mockRequsts(axios, instance, { routes: Object.values(API_ROUTES) });
+}
 
 /**
  * Load payments data.
@@ -15,7 +22,7 @@ const instance = axios.create({
  */
 const getPayments = (params = {}) => instance.request({
   method: 'get',
-  url: '/api/v1/payments',
+  url: API_ROUTES.GET_PAYMENTS,
   params,
 });
 
