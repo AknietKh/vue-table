@@ -72,12 +72,14 @@ export default {
       const [integer, decimal] = amountStr.split(this.decimal);
       const isHaveDecimalPoint = amountStr.includes(this.decimal);
 
+      // Если еще не дописали float число
       if (isHaveDecimalPoint && !decimal) {
         return `${localizeNumber(integer, this.decimal)}${this.decimal}`;
       }
 
       return localizeNumber(amountStr, this.decimal);
     },
+    // форматируем текст в строковый формат числа
     formatValueToNumber(amountStr) {
       if (amountStr === '') {
         return null;

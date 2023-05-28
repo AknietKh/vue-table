@@ -2,11 +2,19 @@ import getPayments from './getPayments';
 import { API_ROUTES } from '../configs/api';
 
 const DEFUALT_CANCEL_MESSAGE = 'mocked data';
+
+// мапа с роутами и моковыми функциями
 const MOCK_API_HANLDERS = {
   [API_ROUTES.GET_PAYMENTS]: getPayments,
 };
 
-export default (axios, instance, config) => {
+// варианты вызова
+// мокаем все:
+// - mockRequsts(axios, instance);
+// мокаем выборочные роуты:
+// - mockRequsts(axios, instance, { routes: [API_ROUTES.GET_PAYMENTS] });
+// - mockRequsts(axios, instance, { routes: Object.values(API_ROUTES) });
+export default (axios, instance, config = null) => {
   const source = axios.CancelToken.source();
 
   instance.interceptors.request.use((axiosConfig) => {
@@ -17,6 +25,7 @@ export default (axios, instance, config) => {
 
     // отменяем запрос. В новой версии axios можно сделать иначе
     axiosConfig.cancelToken = source.token;
+    // в причине отмены записываем данные о роуте
     source.cancel(`${DEFUALT_CANCEL_MESSAGE}:${axiosConfig.url}`);
 
     return axiosConfig;

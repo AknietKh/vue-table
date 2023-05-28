@@ -30,8 +30,8 @@
           <p class="ui-table__mobile-label">
               {{ column.label }}
           </p>
-
-          <slot :name="column.prop" :cell="row[column.prop]">
+          <!-- если нужно можно поулчить доступ до всей ячейки -->
+          <slot :name="column.prop" :cell="row[column.prop]" :column="row">
             <p>{{ row[column.prop] }}</p>
           </slot>
         </div>

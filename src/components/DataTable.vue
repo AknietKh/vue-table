@@ -38,6 +38,7 @@ export default {
 
   name: 'DataTable',
 
+  // добавляем в $options или же можно в data/computed
   localizeNumber,
   DateTime,
 

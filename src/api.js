@@ -10,6 +10,7 @@ const instance = axios.create({
 });
 
 if (isMock) {
+  // мокаем запросы для routes
   mockRequsts(axios, instance, { routes: Object.values(API_ROUTES) });
 }
 
