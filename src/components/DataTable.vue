@@ -72,10 +72,15 @@ export default {
         this.debouncedFilter(moneyFilter);
       },
     },
+    rows: {
+      immediate: true,
+      handler(rows) {
+        this.localRows = rows.slice();
+      },
+    },
   },
 
   created() {
-    this.localRows = this.rows.slice();
     this.debouncedFilter = debounce(this.handleFilter, 300);
   },
 

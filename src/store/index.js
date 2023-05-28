@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import api from '@/api';
 import storage from '../utils/storage';
-import { STORAGE_KEYS } from '../configs/storageKeys';
 
 Vue.use(Vuex);
 
@@ -34,38 +33,58 @@ export default new Vuex.Store({
       commit('setState', { isLoading: true });
 
       try {
-        const cashedData = storage.getInfo(STORAGE_KEYS.PAYMENTS);
-
-        if (cashedData && Array.isArray(cashedData)) {
-          commit('setState', { data: cashedData });
-          commit('setState', { isCached: true });
-          return;
-        }
-
         const { data } = await api.getPayments(params);
 
         if (Array.isArray(data)) {
-          const isCashed = storage.setInfo(STORAGE_KEYS.PAYMENTS, data);
-          if (isCashed) {
-            commit('setState', { isCached: true });
-          }
-
           commit('setState', { data });
         }
+
+        return data;
       } catch (e) {
         // eslint-disable-next-line no-alert
         alert(e?.message);
       } finally {
         commit('setState', { isLoading: false });
       }
+
+      return null;
     },
-    removeCash({ commit }) {
+    // Декоратор, который может оборачивать экшены
+    addCacheApiDecorator({ commit }, { key, fn }) {
+      return async (payload) => {
+        try {
+          const cachedData = storage.getInfo(key);
+
+          if (cachedData && Array.isArray(cachedData)) {
+            commit('setState', { data: cachedData });
+            commit('setState', { isCached: true });
+            return;
+          }
+          const data = await fn(payload);
+
+          if (data && Array.isArray(data)) {
+            const isCached = storage.setInfo(key, data);
+
+            commit('setState', { isCached });
+            commit('setState', { data });
+          } else {
+            commit('setState', { isCached: false });
+          }
+        } catch (e) {
+          commit('setState', { isCached: false });
+          // eslint-disable-next-line no-alert
+          alert(e?.message);
+        }
+      };
+    },
+    removeCache({ commit }, key) {
       try {
-        storage.removeInfo(STORAGE_KEYS.PAYMENTS);
-        commit('setState', { isCashed: false });
+        storage.removeInfo(key);
       } catch (err) {
         // eslint-disable-next-line no-alert
         alert(err?.message);
+      } finally {
+        commit('setState', { isCached: false });
       }
     },
   },
