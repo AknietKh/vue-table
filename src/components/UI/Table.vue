@@ -24,12 +24,13 @@
       >
         <div
           v-for="column in columns"
-          :key="`${column.prop}_${row[column.prop]}`"
+          :key="`${column.prop}_${row.id}`"
           class="ui-table__cell"
         >
           <p class="ui-table__mobile-label">
               {{ column.label }}
-            </p>
+          </p>
+
           <slot :name="column.prop" :cell="row[column.prop]">
             <p>{{ row[column.prop] }}</p>
           </slot>
