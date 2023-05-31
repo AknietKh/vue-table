@@ -26,13 +26,6 @@ describe('Money component', () => {
 
     expect(control.element.value).toBe(value);
 
-    /*
-      1. Не особо понял почему тут брался второй по счету emit, когда ожидаем только один emit
-      2. По тесту ожидалось, что если value пустое, то не должно быть emit (проверка что евента нету - (wrapper.emitted('input')[0]).toEqual(undefined)).
-      Но в таком случае как очищать поле у родителя, когда очищаем поле у money (кроме this.$parent)?
-
-      Мне кажется это скорее не учтено в тесте, поэтому изменил проверку
-    */
     expect(wrapper.emitted('input')[0]).toEqual([emitted]);
   });
 });
