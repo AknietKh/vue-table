@@ -10,7 +10,7 @@
           <p>You can clear cache and load data again.</p>
         </template>
         <template #footer>
-          <ui-button type="primary">
+          <ui-button type="primary" @click="clearCache">
             Clear cache
           </ui-button>
         </template>
@@ -26,6 +26,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import { STORAGE_KEYS } from '../configs/storageKeys';
 
 export default {
 
@@ -54,6 +55,7 @@ export default {
         width: '35%',
       },
     ],
+    cachedLoad: null,
   }),
 
   computed: {
@@ -64,14 +66,23 @@ export default {
     ]),
   },
 
-  created() {
-    this.load();
+  async created() {
+    // получаем расширенную версию load, которая умеет отдавать данные из кеша
+    this.cachedLoad = await this.addCacheApiDecorator({ key: STORAGE_KEYS.PAYMENTS, fn: this.load });
+    this.cachedLoad();
   },
 
   methods: {
     ...mapActions([
       'load',
+      'addCacheApiDecorator',
+      'removeCache',
     ]),
+    async clearCache() {
+      this.removeCache(STORAGE_KEYS.PAYMENTS);
+      // Либо load, либо cacheLoad
+      this.load();
+    },
   },
 };
 </script>
